@@ -2,31 +2,10 @@ import React, { useEffect, useState } from "react"
 import JobsItems from "./JobsItems"
 
 const Jobs = ({ query, category }) => {
-  console.log(query, category)
   const [jobs, setJobs] = useState([])
-  // const [filterState, setFilterState] = useState({
-  //   query: "",
-  //   category: "",
-  // })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    // setFilterState({
-    //   query: query,
-    //   category: category,
-    // })
-    // let timer
-    // if (query === "" || query === undefined) {
-    //   timer = setTimeout(() => {
-    //     fetchJobs()
-    //   }, 1500)
-    // }
-    // if (query !== "") {
-    //   timer = setTimeout(() => {
-    //     fetchJobsFromQuerySearch()
-    //   }, 1500)
-    // }
-    // return () => clearInterval(timer)
-
     let url
     if (query === "" || query === undefined || query.length < 2) {
       url = "https://strive-jobs-api.herokuapp.com/jobs?limit=10&skip=10"
@@ -42,42 +21,46 @@ const Jobs = ({ query, category }) => {
   }, [query, category])
 
   const fetchJobs = async (url) => {
+    setLoading(true)
     try {
       const response = await fetch(url)
       if (!response.ok) {
         throw new Error("Something went wrong")
       }
       const data = await response.json()
-      // console.log(data.data)
       setJobs(data.data)
+      setLoading(false)
     } catch (error) {
       console.log(error)
     }
   }
-  // const fetchJobsFromQuerySearch = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://strive-jobs-api.herokuapp.com/jobs?search=${query}&limit=10`
-  //     )
-  //     if (!response.ok) {
-  //       throw new Error("Something went wrong")
-  //     }
-  //     const data = await response.json()
-  //     console.log(data.data)
-  //     setJobs(data.data)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
 
   return (
-    <div className="container mx-auto px-12">
-      <ul>
-        {jobs.map((job) => (
-          <JobsItems jobs={job} key={job._id} />
-        ))}
-      </ul>
-    </div>
+    <>
+      {!loading && (
+        <div className="container mx-auto px-12">
+          <ul>
+            {jobs.map((job) => (
+              <JobsItems jobs={job} key={job._id} />
+            ))}
+          </ul>
+        </div>
+      )}
+      {loading && (
+        <div className="container mx-auto px-12 flex items-center justify-center">
+          <svg class="animate-spin h-12 w-12 mr-3 ..." viewBox="0 0 24 24">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="8"
+            ></circle>
+          </svg>
+        </div>
+      )}
+    </>
   )
 }
 

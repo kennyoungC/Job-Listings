@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { Route, Routes } from "react-router-dom"
+import ErrorPage from "./ErrorPage"
+import FavouritePage from "./FavouritePage"
 import Header from "./Header"
 import JobDetails from "./JobDetails"
 import Jobs from "./Jobs"
@@ -30,6 +32,8 @@ const Home = () => {
     <Routes>
       <Route path="/" element={homePage} />
       <Route path="/:companyname" element={<JobDetails />} />
+      <Route path="/favourite" element={<FavouritePage />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   )
 }
