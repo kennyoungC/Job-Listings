@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 
 const mapsStateToProps = (state) => ({
-  favLength: state.favourite.content.length,
+  favLength: state.favourite.favourites.length,
 })
 
 const Header = ({ favLength, onHandleSearch, onSetCategory }) => {

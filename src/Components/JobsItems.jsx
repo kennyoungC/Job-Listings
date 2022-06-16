@@ -6,7 +6,7 @@ import { connect } from "react-redux"
 import { addFavActions, removeFavActions } from "../redux/actions"
 
 const mapsStateToProps = (state) => ({
-  fav: state.favourite.content,
+  fav: state.favourite.favourites,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -23,7 +23,9 @@ const JobsItems = ({ fav, jobs, addFavourite, removeFavorite }) => {
       isFav = true
     }
   })
-  // console.log(isFav)
+
+  // const isFavvvvv = fav.includes(jobs.company_name)
+  // console.log(isFavvvvv)
 
   const ago = moment(jobs.publication_date).fromNow()
   const firstLetter = jobs.company_name.slice(0, 1)

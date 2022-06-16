@@ -5,8 +5,8 @@ import { BsArrowLeft } from "react-icons/bs"
 import { useNavigate } from "react-router-dom"
 
 const mapsStateToProps = (state) => ({
-  fav: state.favourite.content,
-  favLength: state.favourite.content.length,
+  fav: state.favourite.favourites,
+  favLength: state.favourite.favourites.length,
 })
 
 const FavouritePage = ({ fav, favLength }) => {

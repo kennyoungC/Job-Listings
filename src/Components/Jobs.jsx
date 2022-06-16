@@ -1,10 +1,28 @@
 import React, { useEffect, useState } from "react"
+import { getJobAction } from "../redux/actions"
 import JobsItems from "./JobsItems"
+import { connect } from "react-redux"
 
-const Jobs = ({ query, category }) => {
-  const [jobs, setJobs] = useState([])
-  const [loading, setLoading] = useState(false)
-
+const mapsStateToProps = (state) => ({
+  jobs: state.jobList.jobs,
+  loading: state.jobList.loading,
+  isError: state.jobList.isError,
+  errorMsg: state.jobList.errorMsg,
+})
+const mapDispatchToProps = (dispatch) => ({
+  getListOfJobs: (url) => {
+    dispatch(getJobAction(url))
+  },
+})
+const Jobs = ({
+  query,
+  category,
+  getListOfJobs,
+  jobs,
+  loading,
+  isError,
+  errorMsg,
+}) => {
   useEffect(() => {
     let url
     if (query === "" || query === undefined || query.length < 2) {
@@ -17,23 +35,8 @@ const Jobs = ({ query, category }) => {
       url = `https://strive-jobs-api.herokuapp.com/jobs?category=${category}&limit=10`
     }
 
-    fetchJobs(url)
+    getListOfJobs(url)
   }, [query, category])
-
-  const fetchJobs = async (url) => {
-    setLoading(true)
-    try {
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error("Something went wrong")
-      }
-      const data = await response.json()
-      setJobs(data.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   return (
     <>
@@ -48,6 +51,7 @@ const Jobs = ({ query, category }) => {
       )}
       {loading && (
         <div className="container mx-auto px-12 flex items-center justify-center">
+          {errorMsg}
           <svg class="animate-spin h-12 w-12 mr-3 ..." viewBox="0 0 24 24">
             <circle
               class="opacity-25"
@@ -60,8 +64,13 @@ const Jobs = ({ query, category }) => {
           </svg>
         </div>
       )}
+      {isError && (
+        <div className="container mx-auto text-center text-2xl bg-lime-300 rounded-sm px-12">
+          {errorMsg}
+        </div>
+      )}
     </>
   )
 }
 
-export default Jobs
+export default connect(mapsStateToProps, mapDispatchToProps)(Jobs)
