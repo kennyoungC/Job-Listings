@@ -14,9 +14,9 @@ const Home = () => {
     setCategory(cat)
   }
   const handleSearch = (e) => {
-    if (e.target.value.length > 2) {
-      setCategory("")
-    }
+    // if (e.target.value.length > 2) {
+    //   setCategory("")
+    // }
     setSearchQ(e.target.value)
   }
   const homePage = (

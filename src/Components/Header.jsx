@@ -29,6 +29,7 @@ const Header = ({ favLength, onHandleSearch, onSetCategory }) => {
       console.log(error)
     }
   }
+ 
 
   return (
     <>

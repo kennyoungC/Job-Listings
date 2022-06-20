@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { getJobAction } from "../redux/actions"
 import JobsItems from "./JobsItems"
 import { connect } from "react-redux"
@@ -36,6 +36,7 @@ const Jobs = ({
     }
 
     getListOfJobs(url)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, category])
 
   return (
@@ -51,7 +52,6 @@ const Jobs = ({
       )}
       {loading && (
         <div className="container mx-auto px-12 flex items-center justify-center">
-          {errorMsg}
           <svg class="animate-spin h-12 w-12 mr-3 ..." viewBox="0 0 24 24">
             <circle
               class="opacity-25"
