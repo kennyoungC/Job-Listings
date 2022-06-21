@@ -1,7 +1,8 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { getJobAction } from "../redux/actions"
 import JobsItems from "./JobsItems"
 import { connect } from "react-redux"
+import Pagination from "./Pagination"
 
 const mapsStateToProps = (state) => ({
   jobs: state.jobList.jobs,
@@ -23,31 +24,53 @@ const Jobs = ({
   isError,
   errorMsg,
 }) => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage] = useState(10)
+
   useEffect(() => {
     let url
     if (query === "" || query === undefined || query.length < 2) {
-      url = "https://strive-jobs-api.herokuapp.com/jobs?limit=10&skip=10"
+      url = "https://strive-jobs-api.herokuapp.com/jobs?limit=50&skip=10"
     }
     if (query.length > 2 && query !== "") {
-      url = `https://strive-jobs-api.herokuapp.com/jobs?search=${query}&limit=10`
+      url = `https://strive-jobs-api.herokuapp.com/jobs?search=${query}&limit=50`
     }
     if (category !== "" && category !== undefined) {
-      url = `https://strive-jobs-api.herokuapp.com/jobs?category=${category}&limit=10`
+      url = `https://strive-jobs-api.herokuapp.com/jobs?category=${category}&limit=50`
     }
 
     getListOfJobs(url)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, category])
 
+  const indexOfLastPost = currentPage * postsPerPage
+  const indexOfFirstPost = indexOfLastPost - postsPerPage
+  const currentPosts = jobs.slice(indexOfFirstPost, indexOfLastPost)
+
+  const paginateFront = () => setCurrentPage(currentPage + 1)
+  const paginateBack = () => setCurrentPage(currentPage - 1)
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
   return (
     <>
       {!loading && (
         <div className="container mx-auto px-12">
           <ul>
-            {jobs.map((job) => (
+            {currentPosts.map((job) => (
               <JobsItems jobs={job} key={job._id} />
             ))}
           </ul>
+          <div className="text-center mb-12">
+            <Pagination
+              paginate={paginate}
+              postsPerPage={postsPerPage}
+              totalPosts={jobs.length}
+              paginateBack={paginateBack}
+              paginateFront={paginateFront}
+              currentPage={currentPage}
+            />
+          </div>
         </div>
       )}
       {loading && (
