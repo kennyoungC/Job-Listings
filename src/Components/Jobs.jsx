@@ -87,11 +87,12 @@ const Jobs = ({
           </svg>
         </div>
       )}
-      {isError && (
+      {/* {isError && !loading && (
         <div className="container mx-auto text-center text-2xl bg-lime-300 rounded-sm px-12">
-          {errorMsg}
+          {/* {errorMsg} *
+          Could not find jobs. Please try again later.
         </div>
-      )}
+      )} */}
     </>
   )
 }
